@@ -1,10 +1,14 @@
 {
   "dependencies": {
     "axios": "^1.6.8",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "lodash": "^4.17.21",
+    "sharp": "^0.33.3"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.0",
     "@types/node": "^20.12.2",
+    "@types/sharp": "^0.32.0",
     "prettier": "^3.2.5"
   }
 }
