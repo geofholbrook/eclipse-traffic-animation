@@ -22,7 +22,7 @@ fs.readdirSync(config.compositeDirectory).forEach((file) => {
     // Generate thumbnails
     sharp(
       path.join(config.compositeDirectory, file))
-      .resize({width: 256, background: { r: 0, g: 0, b: 0, alpha: 1 }}) // Thumbnail size
+      .resize({width: 256, height: 256, background: { r: 0, g: 0, b: 0, alpha: 1 }}) // Thumbnail size
       .toFile(path.join(__dirname, 'public', 'thumbnails', file), (err) => {
         if (err) {
           console.error('Error generating thumbnail:', err);
@@ -37,17 +37,28 @@ app.get('/', (req, res) => {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>Image Gallery</title>
+      <title>Traffic Animation Frames</title>
       <style>
-        .gallery {
-          display: flex;
-          flex-wrap: wrap;
-        }
-        .thumbnail {
-          margin: 5px;
-          background-color: #000000;
-        }
-      </style>
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px; /* Adjust the gap between thumbnails */
+    }
+    .thumbnail {
+      background-color: black; /* Apply black background */
+      padding: 5px; /* Add padding around each thumbnail */
+      text-align: center; /* Center the filename */
+    }
+    .thumbnail img {
+      display: block;
+      width: 256px; /* Thumbnail width */
+      height: 256px; /* Thumbnail height */
+    }
+    .filename {
+      color: white; /* Filename color */
+      margin-top: 5px; /* Adjust margin between thumbnail and filename */
+    }
+  </style>
     </head>
     <body>
       <h1>Image Gallery</h1>
@@ -59,8 +70,9 @@ app.get('/', (req, res) => {
       <div class="thumbnail">
         <a href="/images/${image}" download>
           <img src="/thumbnails/${image}" alt="${image}">
-        </a>
-      </div>
+          <div class="filename">${image}</div>
+          </a>
+        </div>
     `;
   });
 

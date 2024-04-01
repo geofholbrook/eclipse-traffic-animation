@@ -1,24 +1,24 @@
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
-import { latLonToTileXYZ } from '../utils/latLonToTileXYZ';
-import { fetchAndComposeGrid } from '../fetchAndComposeGrid';
+import { latLonToTileXYZ } from './utils/latLonToTileXYZ';
+import { fetchAndComposeGrid } from './fetchAndComposeGrid';
 
 // const upperLeftLatLon = [55, -141];
 // const lowerRightLatLon = [10, -62];
 
 const trafficGridJson = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '..', '..', 'traffic-grid.json')).toString(),
+    fs.readFileSync(path.join(__dirname, '..', 'traffic-grid.json')).toString(),
 ) as {
     upperLeftLatLon: [number, number];
     lowerRightLatLon: [number, number];
     zoom: number;
 };
 
-const upperLeftLatLon = trafficGridJson.upperLeftLatLon ||[45, -90];
+const upperLeftLatLon = trafficGridJson.upperLeftLatLon || [45, -90];
 const lowerRightLatLon = trafficGridJson.lowerRightLatLon || [30, -70];
 
-const zoom = 7;
+const zoom = trafficGridJson.zoom || 7;
 
 export const tileSize = 64;
 
