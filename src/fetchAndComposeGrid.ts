@@ -11,7 +11,7 @@ export async function fetchAndComposeGrid(
     y2: number,
     zoom: number,
     tileSize: number = 256,
-    style: Style = 'relative-delay'
+    style: Style = 'relative-delay',
 ) {
     const rows: string[][] = [];
     for (let y = y1; y <= y2; y++) {

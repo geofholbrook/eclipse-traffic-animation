@@ -1,7 +1,8 @@
 {
   "scripts": {
     "create-frame": "ts-node ./src/create-frame.app.ts",
-    "image-server": "ts-node ./src/server/index.ts"
+    "image-server": "ts-node ./src/server/index.ts",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
     "axios": "^1.6.8",

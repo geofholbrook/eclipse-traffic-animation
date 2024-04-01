@@ -14,26 +14,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Generate thumbnails and list of images
 const images: string[] = [];
 
-console.log('generating thumbnails')
+console.log('generating thumbnails');
 fs.readdirSync(config.compositeDirectory).forEach((file) => {
-  if (file.toLowerCase().endsWith('.png')) {
-    images.push(file);
+    if (file.toLowerCase().endsWith('.png')) {
+        images.push(file);
 
-    // Generate thumbnails
-    sharp(
-      path.join(config.compositeDirectory, file))
-      .resize({width: 256, height: 256, background: { r: 0, g: 0, b: 0, alpha: 1 }}) // Thumbnail size
-      .toFile(path.join(__dirname, 'public', 'thumbnails', file), (err) => {
-        if (err) {
-          console.error('Error generating thumbnail:', err);
-        }
-      });
-  }
+        // Generate thumbnails
+        sharp(path.join(config.compositeDirectory, file))
+            .resize({ width: 256, height: 256, background: { r: 0, g: 0, b: 0, alpha: 1 } }) // Thumbnail size
+            .toFile(path.join(__dirname, 'public', 'thumbnails', file), (err) => {
+                if (err) {
+                    console.error('Error generating thumbnail:', err);
+                }
+            });
+    }
 });
 
 // Serve HTML page
 app.get('/', (req, res) => {
-  let html = `
+    let html = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -65,8 +64,8 @@ app.get('/', (req, res) => {
       <div class="gallery">
   `;
 
-  images.forEach((image) => {
-    html += `
+    images.forEach((image) => {
+        html += `
       <div class="thumbnail">
         <a href="/images/${image}" download>
           <img src="/thumbnails/${image}" alt="${image}">
@@ -74,18 +73,18 @@ app.get('/', (req, res) => {
           </a>
         </div>
     `;
-  });
+    });
 
-  html += `
+    html += `
       </div>
     </body>
     </html>
   `;
 
-  res.send(html);
+    res.send(html);
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

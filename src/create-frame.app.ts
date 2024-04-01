@@ -8,9 +8,7 @@ import { Style } from './fetchTile';
 // const upperLeftLatLon = [55, -141];
 // const lowerRightLatLon = [10, -62];
 
-const trafficGridJson = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '..', 'traffic-grid.json')).toString(),
-) as {
+const trafficGridJson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'traffic-grid.json')).toString()) as {
     upperLeftLatLon: [number, number];
     lowerRightLatLon: [number, number];
     zoom: number;
