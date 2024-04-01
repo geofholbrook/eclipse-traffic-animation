@@ -13,13 +13,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Generate thumbnails and list of images
 const images: string[] = [];
+
+console.log('generating thumbnails')
 fs.readdirSync(config.compositeDirectory).forEach((file) => {
   if (file.toLowerCase().endsWith('.png')) {
     images.push(file);
 
     // Generate thumbnails
-    sharp(path.join(config.compositeDirectory, file))
-      .resize(100, 100) // Thumbnail size
+    sharp(
+      path.join(config.compositeDirectory, file))
+      .resize({width: 256, background: { r: 0, g: 0, b: 0, alpha: 1 }}) // Thumbnail size
       .toFile(path.join(__dirname, 'public', 'thumbnails', file), (err) => {
         if (err) {
           console.error('Error generating thumbnail:', err);
@@ -42,6 +45,7 @@ app.get('/', (req, res) => {
         }
         .thumbnail {
           margin: 5px;
+          background-color: #000000;
         }
       </style>
     </head>

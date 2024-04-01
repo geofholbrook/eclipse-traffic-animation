@@ -41,7 +41,7 @@ export async function fetchAndComposeGrid(
             width: canvasWidth,
             height: canvasHeight,
             channels: 4, // RGBA
-            background: { r: 0, g: 0, b: 0, alpha: 1 },
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
         },
     });
 
