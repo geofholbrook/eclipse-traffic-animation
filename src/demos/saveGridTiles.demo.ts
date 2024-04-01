@@ -3,13 +3,13 @@ import { saveTile } from '../saveTile';
 import sharp from 'sharp';
 import { latLonToTileXYZ } from '../utils/latLonToTileXYZ';
 
-const upperLeftLatLon = [55, -141];
-const lowerRightLatLon = [10, -62];
+// const upperLeftLatLon = [55, -141];
+// const lowerRightLatLon = [10, -62];
 
-// const upperLeftLatLon = [45, -90];
-// const lowerRightLatLon = [30, -70];
+const upperLeftLatLon = [45, -90];
+const lowerRightLatLon = [30, -70];
 
-const zoom = 8;
+const zoom = 9;
 
 const tileSize = 64;
 
