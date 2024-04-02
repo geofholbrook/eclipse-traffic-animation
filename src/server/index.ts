@@ -5,13 +5,19 @@ import path from 'path';
 import sharp from 'sharp';
 import { config } from '../config';
 import { addGalleryRoute } from './addGalleryRoute';
-import { initializeQueues } from './queues';
+import { createFrameQueue, initializeQueues } from './queues';
+import { KeyValueStore } from '../KeyValueStore';
+import { dayjsUTC } from '../utils/dayjsUTC';
+import _ from 'lodash';
+import { getTrafficGridJson } from '../getTrafficGridJson';
 
 export const app = express();
 const PORT = 3000;
 
 // Serve static files
 app.use(express.static(config.publicDirectory));
+
+export const keyValueStore = new KeyValueStore(process.env.STORAGE_PATH!);
 
 initializeQueues(app);
 
@@ -35,6 +41,46 @@ fs.readdirSync(config.compositeDirectory).forEach((file) => {
 });
 
 addGalleryRoute(app, images);
+
+function shouldExecuteNow() {
+    const timestamp = keyValueStore.get<number>('latestExecutionStamp');
+    if (!timestamp) {
+        console.log('no value stored, should execute.');
+        keyValueStore.set('latestExecutionStamp', Date.now());
+        return true;
+    }
+    const latestExecution = dayjsUTC(timestamp);
+    const expectedExecution = dayjsUTC()
+        .startOf('hour')
+        .add(dayjsUTC().minute() < 30 ? 0 : 30, 'minutes');
+
+    console.log(
+        JSON.stringify(
+            {
+                latestExecution: latestExecution.toISOString(),
+                expectedExecution: expectedExecution.toISOString(),
+            },
+            null,
+            4,
+        ),
+    );
+
+    if (latestExecution.isBefore(expectedExecution)) {
+        console.log('should execute.');
+        keyValueStore.set('latestExecutionStamp', Date.now());
+        return true;
+    } else {
+        return false;
+    }
+}
+
+setInterval(() => {
+    console.log(`[${dayjsUTC().toISOString()}] running stale check...`);
+    if (shouldExecuteNow()) {
+        console.log('adding job to queue');
+        createFrameQueue.add('create-frame' + _.uniqueId(), getTrafficGridJson());
+    }
+}, 60000);
 
 // Start server
 app.listen(PORT, () => {

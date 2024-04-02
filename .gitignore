@@ -7,3 +7,4 @@ src/demos/output*
 **/*.png
 
 traffic-grid.json
+cheap-database.json

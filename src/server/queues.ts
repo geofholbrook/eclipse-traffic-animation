@@ -7,7 +7,7 @@ import { IJSONConfig, getTrafficGridJson } from '../getTrafficGridJson';
 import { latLonToTileXYZ } from '../utils/latLonToTileXYZ';
 import { fetchAndComposeGrid } from '../fetchAndComposeGrid';
 
-const createFrameQueue = new Queue('create-frame', {
+export const createFrameQueue = new Queue('create-frame', {
     connection: {
         host: 'localhost',
         port: 6379,
@@ -15,7 +15,6 @@ const createFrameQueue = new Queue('create-frame', {
 });
 
 const testQueue = new Queue('test');
-const schedulerQueue = new Queue('scheduler');
 
 const createFrameWorker = new Worker(
     'create-frame',
@@ -33,6 +32,7 @@ const createFrameWorker = new Worker(
         return { success: true };
     },
     {
+        concurrency: 1,
         connection: {
             host: 'localhost',
             port: 6379,
@@ -44,19 +44,12 @@ export async function initializeQueues(app: Application) {
     const serverAdapter = new ExpressAdapter();
     serverAdapter.setBasePath('/admin/queues');
     createBullBoard({
-        queues: [new BullMQAdapter(createFrameQueue), new BullMQAdapter(testQueue), new BullMQAdapter(schedulerQueue)],
+        queues: [new BullMQAdapter(createFrameQueue), new BullMQAdapter(testQueue)],
         serverAdapter: serverAdapter,
     });
     app.use('/admin/queues', serverAdapter.getRouter());
-
-    await addRepeaterJob();
-}
-
-async function addRepeaterJob() {
-    const data = getTrafficGridJson();
-    const existingRepeaters = await createFrameQueue.getRepeatableJobs();
-    for (const repeater of existingRepeaters) {
-        await createFrameQueue.removeRepeatableByKey(repeater.key);
-    }
-    createFrameQueue.add('repeater', data, { repeat: { pattern: '0 */30 * * * *' } });
+    return {
+        testQueue,
+        createFrameQueue,
+    };
 }
