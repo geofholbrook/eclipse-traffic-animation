@@ -5,7 +5,10 @@
     "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
+    "@bull-board/api": "^5.15.3",
+    "@bull-board/express": "^5.15.3",
     "axios": "^1.6.8",
+    "bullmq": "^5.5.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

@@ -1,19 +1,9 @@
 import 'dotenv/config';
-import fs from 'fs';
-import path from 'path';
 import { latLonToTileXYZ } from './utils/latLonToTileXYZ';
 import { fetchAndComposeGrid } from './fetchAndComposeGrid';
-import { Style } from './fetchTile';
+import { getTrafficGridJson } from './getTrafficGridJson';
 
-// const upperLeftLatLon = [55, -141];
-// const lowerRightLatLon = [10, -62];
-
-const trafficGridJson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'traffic-grid.json')).toString()) as {
-    upperLeftLatLon: [number, number];
-    lowerRightLatLon: [number, number];
-    zoom: number;
-    style: Style;
-};
+const trafficGridJson = getTrafficGridJson();
 
 const upperLeftLatLon = trafficGridJson.upperLeftLatLon || [45, -90];
 const lowerRightLatLon = trafficGridJson.lowerRightLatLon || [30, -70];
