@@ -2,7 +2,8 @@
   "scripts": {
     "create-frame": "ts-node ./src/create-frame.app.ts",
     "image-server": "ts-node ./src/server/index.ts",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "build": "tsc"
   },
   "dependencies": {
     "@bull-board/api": "^5.15.3",
