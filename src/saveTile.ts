@@ -10,7 +10,7 @@ export async function saveTile(x: number, y: number, zoom: number, style: Style 
         return savePath;
     }
 
-    const buffer = await fetchTile(x, y, zoom);
+    const buffer = await fetchTile(x, y, zoom, style);
     writeFileSync(savePath, buffer);
     return savePath;
 }

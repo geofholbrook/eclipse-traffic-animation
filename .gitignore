@@ -8,3 +8,5 @@ src/demos/output*
 
 traffic-grid.json
 cheap-database.json
+
+dump.rdb
